@@ -124,4 +124,21 @@ class SensorApiControllerTest extends WebTestCase
         $this->assertArrayHasKey('north', $data[0]);
         $this->assertArrayHasKey('west', $data[0]);
     }
+
+    /**
+     * Check fields.
+     */
+    public function testNotFound404(){
+
+
+        $this->client->request('GET', '/dummy');
+
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $this->assertJson($response->getContent());
+
+        $this->assertContains('Not found', $response->getContent());
+    }
 }
