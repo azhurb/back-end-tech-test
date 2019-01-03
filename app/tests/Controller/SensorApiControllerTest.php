@@ -126,7 +126,7 @@ class SensorApiControllerTest extends WebTestCase
     }
 
     /**
-     * Check fields.
+     * Check 404.
      */
     public function testNotFound404(){
 
