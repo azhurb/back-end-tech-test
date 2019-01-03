@@ -2,15 +2,25 @@
 
 namespace App\Repository\Upstream;
 
+/**
+ * Class WeatherRepository
+ * @package App\Repository\Upstream
+ */
 class WeatherRepository implements DataRepositoryInterface
 {
     private $temperatureRepository;
     private $windSpeedRepository;
 
-    public function __construct($temperatureServiceUri, $windSpeedServiceUri)
+    /**
+     * WeatherRepository constructor.
+     * @param $temperatureServiceUri
+     * @param $windSpeedServiceUri
+     * @param $useCache
+     */
+    public function __construct($temperatureServiceUri, $windSpeedServiceUri, $useCache)
     {
-        $this->temperatureRepository = new TemperatureRepository($temperatureServiceUri);
-        $this->windSpeedRepository = new WindSpeedRepository($windSpeedServiceUri);
+        $this->temperatureRepository = new TemperatureRepository($temperatureServiceUri, $useCache);
+        $this->windSpeedRepository = new WindSpeedRepository($windSpeedServiceUri, $useCache);
     }
 
     /**

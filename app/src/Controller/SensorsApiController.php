@@ -11,7 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Upstream\DataRepositoryInterface;
 use App\Util\DateRange;
+use App\Util\DateRangeException;
 
+/**
+ * Api controller.
+ *
+ * Class SensorsApiController
+ * @package App\Controller
+ */
 class SensorsApiController
 {
     /**
@@ -47,9 +54,18 @@ class SensorsApiController
         return $this->getFromRepository($weatherRepository, $request);
     }
 
+    /**
+     * @param DataRepositoryInterface $repository
+     * @param Request $request
+     * @return JsonResponse
+     */
     private function getFromRepository(DataRepositoryInterface $repository, Request $request)
     {
-        $dateRange = new DateRange($request->query->get('start'), $request->query->get('end'));
+        try {
+            $dateRange = new DateRange($request->query->get('start'), $request->query->get('end'));
+        } catch (DateRangeException $e) {
+            return new JsonResponse(['message' => $e->getMessage()], 400);
+        }
 
         $results = [];
 

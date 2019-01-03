@@ -4,8 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    app.temperature_service_uri: 'http://temperature:8001/' #todo: change to localhost
-    app.windspeed_service_uri: 'http://windspeed:8080/' #todo: change to localhost
+    app.temperature_service_uri: 'http://temperature:8001/'
+    app.windspeed_service_uri: 'http://windspeed:8080/'
+    app.use_cache: true
 
 services:
     # default configuration for services in *this* file
@@ -15,6 +16,7 @@ services:
         bind:
             $temperatureServiceUri: '%app.temperature_service_uri%'
             $windSpeedServiceUri: '%app.windspeed_service_uri%'
+            $useCache: '%app.use_cache%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

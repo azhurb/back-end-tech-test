@@ -6,19 +6,25 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
+/**
+ * Class DataRepository
+ * @package App\Repository\Upstream
+ */
 abstract class DataRepository implements DataRepositoryInterface
 {
 
     private $client;
-    const USE_CACHE = true;
+    private $useCache;
 
     /**
      * DataRepository constructor.
      * @param $url string
+     * @param $useCache boolean
      */
-    public function __construct($url)
+    public function __construct($url, $useCache)
     {
-        $this->client = new Client(['base_uri' => $url, ]);
+        $this->client = new Client(['base_uri' => $url]);
+        $this->useCache = $useCache;
     }
 
     /**
@@ -29,13 +35,13 @@ abstract class DataRepository implements DataRepositoryInterface
     public function findByDate($date)
     {
         $key = (new \ReflectionClass($this))->getShortName() . '' . md5($date);
-        $cache = new FilesystemCache(); // todo: change to memcached
+        $cache = new FilesystemCache(); // todo: switch to memcached in production
 
         try {
 
-            if (self::USE_CACHE && $cache->has($key)) {
+            if ($this->useCache && $cache->has($key)) {
                 $data = $cache->get($key);
-            }else{
+            } else {
                 $response = $this->client->request('GET', '?at=' . $date, [
                     'headers' => [
                         'Accept' => 'application/json'
@@ -44,7 +50,7 @@ abstract class DataRepository implements DataRepositoryInterface
 
                 $data = \json_decode($response->getBody(), true);
 
-                if (self::USE_CACHE && $response->getStatusCode() === 200 && $data !== false){
+                if ($this->useCache && $response->getStatusCode() === 200 && $data !== false) {
                     $cache->set($key, $data);
                 }
             }

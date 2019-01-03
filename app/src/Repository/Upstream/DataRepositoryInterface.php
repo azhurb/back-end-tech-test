@@ -2,6 +2,10 @@
 
 namespace App\Repository\Upstream;
 
+/**
+ * Interface DataRepositoryInterface
+ * @package App\Repository\Upstream
+ */
 interface DataRepositoryInterface
 {
 

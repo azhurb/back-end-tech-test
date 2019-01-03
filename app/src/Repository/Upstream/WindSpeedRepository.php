@@ -2,10 +2,19 @@
 
 namespace App\Repository\Upstream;
 
+/**
+ * Class WindSpeedRepository
+ * @package App\Repository\Upstream
+ */
 class WindSpeedRepository extends DataRepository
 {
-    public function __construct($windSpeedServiceUri)
+    /**
+     * WindSpeedRepository constructor.
+     * @param string $windSpeedServiceUri
+     * @param bool $useCache
+     */
+    public function __construct($windSpeedServiceUri, $useCache)
     {
-        parent::__construct($windSpeedServiceUri);
+        parent::__construct($windSpeedServiceUri, $useCache);
     }
 }
